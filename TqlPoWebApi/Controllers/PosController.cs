@@ -21,6 +21,67 @@ namespace TqlPoWebApi.Controllers {
         }
 
         // GET: api/Pos
+        [HttpGet("reviews")]
+        public async Task<ActionResult<IEnumerable<Po>>> GetPosInReview() {
+            return await _context.Pos
+                                .Where(p => p.Status == Po.StatusReview)
+                                .Include(p => p.Employee)
+                                .ToListAsync();
+        }
+
+        [HttpPut("{id}/reject")]
+        public async Task<IActionResult> PutPoToRejected(int id) {
+
+            var po = await _context.Pos.FindAsync(id);
+            if(po == null) {
+                return NotFound();
+            }
+
+            po.Status = Po.StatusRejected;
+
+            return await PutPo(id, po);
+        }
+
+        [HttpPut("{id}/approve")]
+        public async Task<IActionResult> PutPoToApproved(int id) {
+
+            var po = await _context.Pos.FindAsync(id);
+            if(po == null) {
+                return NotFound();
+            }
+
+            po.Status = Po.StatusApproved;
+
+            return await PutPo(id, po);
+        }
+
+        [HttpPut("{id}/review")]
+        public async Task<IActionResult> PutPoToReviewOrApproved(int id) {
+
+            var po = await _context.Pos.FindAsync(id);
+            if(po == null) {
+                return NotFound();
+            }
+            
+            po.Status = (po.Total > 0 && po.Total <= 100) ? Po.StatusApproved : Po.StatusReview;
+
+            return await PutPo(id, po);
+        }
+
+        [HttpPut("{id}/edit")]
+        public async Task<IActionResult> PutPoToEdit(int id) {
+
+            var po = await _context.Pos.FindAsync(id);
+            if(po == null) {
+                return NotFound();
+            }
+
+            po.Status = Po.StatusEdit;
+
+            return await PutPo(id, po);
+        }
+        
+        // GET: api/Pos
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Po>>> GetPos() {
             return await _context.Pos
