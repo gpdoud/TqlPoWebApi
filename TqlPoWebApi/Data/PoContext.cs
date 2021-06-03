@@ -14,6 +14,7 @@ namespace TqlPoWebApi.Data {
             : base(options) {}
 
         public DbSet<Employee> Employee { get; set; }
+        public DbSet<Po> Pos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder) {
             builder.Entity<Employee>(e => {
