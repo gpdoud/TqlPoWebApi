@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TqlPoWebApi.Data;
 
 namespace TqlPoWebApi.Migrations
 {
     [DbContext(typeof(PoContext))]
-    partial class PoContextModelSnapshot : ModelSnapshot
+    [Migration("20210603153734_added po")]
+    partial class addedpo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,29 +58,6 @@ namespace TqlPoWebApi.Migrations
                     b.ToTable("Employee");
                 });
 
-            modelBuilder.Entity("TqlPoWebApi.Models.Item", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(5,2)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Items");
-                });
-
             modelBuilder.Entity("TqlPoWebApi.Models.Po", b =>
                 {
                     b.Property<int>("Id")
@@ -112,51 +91,11 @@ namespace TqlPoWebApi.Migrations
                     b.ToTable("Pos");
                 });
 
-            modelBuilder.Entity("TqlPoWebApi.Models.Poline", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("PoId");
-
-                    b.ToTable("Polines");
-                });
-
             modelBuilder.Entity("TqlPoWebApi.Models.Po", b =>
                 {
                     b.HasOne("TqlPoWebApi.Models.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("TqlPoWebApi.Models.Poline", b =>
-                {
-                    b.HasOne("TqlPoWebApi.Models.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TqlPoWebApi.Models.Po", "Po")
-                        .WithMany()
-                        .HasForeignKey("PoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
